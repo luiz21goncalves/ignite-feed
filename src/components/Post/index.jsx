@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { formatDistanceToNow, format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import shortid from 'shortid'
 
 import { Avatar } from '../Avatar'
 import { Comment } from '../Comment'
@@ -9,9 +11,12 @@ import styles from './styles.module.css'
 export function Post(props) {
   const { author, content, publishedAt } = props
 
+  const [comments, setComments] = useState([])
+  const [newCommentText, setNewCommentText] = useState('')
+
   const publishedDateFormatted = format(
-    publishedAt, 
-    "dd 'de' LLLL 'de' yyyy 'às' HH:mm'h'", 
+    publishedAt,
+    "dd 'de' LLLL 'de' yyyy 'às' HH:mm'h'",
     { locale: ptBR }
   )
 
@@ -19,6 +24,23 @@ export function Post(props) {
     locale: ptBR,
     addSuffix: true,
   })
+
+  function handleCreateNewComment(event) {
+    event.preventDefault()
+
+    setComments(prevState => ([
+      ...prevState,
+      {
+        id: shortid.generate(),
+        content: newCommentText
+      }
+    ]))
+    setNewCommentText('')
+  }
+
+  function handleChangeNewCommentText(event) {
+    setNewCommentText(event.target.value)
+  }
 
   return (
     <article className={styles.post}>
@@ -33,8 +55,8 @@ export function Post(props) {
           </div>
         </div>
 
-        <time 
-          title={publishedDateFormatted} 
+        <time
+          title={publishedDateFormatted}
           dateTime={publishedAt.toISOString()}
         >
           Publicado {publishedDateRelativeToNow}
@@ -45,13 +67,13 @@ export function Post(props) {
         {content.map((line) => {
           if (line.type === 'paragraph') {
             return (
-              <p>{line.content}</p>
+              <p key={shortid.generate()}>{line.content}</p>
             )
           }
 
           if (line.type === 'link') {
             return (
-              <p>
+              <p key={shortid.generate()}>
                 <a href={line.content}>{line.content}</a>
               </p>
             )
@@ -59,18 +81,23 @@ export function Post(props) {
         })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
-        <textarea placeholder='Deixe seu comentário'/>
+        <textarea
+          placeholder='Deixe seu comentário'
+          name="comment"
+          value={newCommentText}
+          onChange={handleChangeNewCommentText}
+        />
         <footer>
           <button type="submit">Publicar</button>
         </footer>
       </form>
 
       <div className={styles.commentsList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map((comment) => (
+          <Comment key={comment.id} content={comment.content} />
+        ))}
       </div>
     </article>
   )
