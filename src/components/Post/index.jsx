@@ -20,6 +20,10 @@ export function Post(props) {
   function handleCreateNewComment(event) {
     event.preventDefault()
 
+    if (newCommentText.length === 0) {
+      return
+    }
+
     setComments(prevState => ([
       ...prevState,
       {
