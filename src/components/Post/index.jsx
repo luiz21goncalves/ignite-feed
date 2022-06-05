@@ -36,12 +36,19 @@ export function Post(props) {
   }
 
   function handleChangeNewCommentText(event) {
+    event.target.setCustomValidity('')
     setNewCommentText(event.target.value)
   }
 
   function deleteComment(id) {
     setComments(prevState => prevState.filter(comment => comment.id !== id))
   }
+
+  function handleNewCommentInvalid(event) {
+    event.target.setCustomValidity('Esse campo é obrigatório!')
+  }
+
+  const isNewCommentEmpty = newCommentText.length === 0
 
   return (
     <article className={styles.post}>
@@ -89,9 +96,13 @@ export function Post(props) {
           name="comment"
           value={newCommentText}
           onChange={handleChangeNewCommentText}
+          required
+          onInvalid={handleNewCommentInvalid}
         />
         <footer>
-          <button type="submit">Publicar</button>
+          <button disabled={isNewCommentEmpty} type="submit">
+            Publicar
+          </button>
         </footer>
       </form>
 
