@@ -6,10 +6,10 @@ import { formatLongDate, formatRelativeDate } from '../../utils/date'
 import styles from './styles.module.css'
 
 export function Comment(props) {
-  const { content, author, createdAt } = props
+  const { comment, author, onDeleteComment } = props
 
-  const createdDateFormatted = formatLongDate(createdAt)
-  const createdDateRelativeToNow = formatRelativeDate(createdAt)
+  const createdDateFormatted = formatLongDate(comment.createdAt)
+  const createdDateRelativeToNow = formatRelativeDate(comment.createdAt)
 
   return (
     <div className={styles.comment}>
@@ -23,16 +23,16 @@ export function Comment(props) {
           <header>
             <div className={styles.authorAndTime}>
               <strong>{author.name}</strong>
-              <time title={createdDateFormatted} dateTime={createdAt.toISOString()}>
+              <time title={createdDateFormatted} dateTime={comment.createdAt.toISOString()}>
                 {createdDateRelativeToNow}
               </time>
             </div>
 
             <button title="Deletar comentário">
-              <Trash size={24} />
+              <Trash size={24} onClick={() => onDeleteComment(comment.id)} />
             </button>
           </header>
-          <p>{content}</p>
+          <p>{comment.content}</p>
         </div>
 
         <footer>

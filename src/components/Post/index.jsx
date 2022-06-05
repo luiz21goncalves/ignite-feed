@@ -39,6 +39,10 @@ export function Post(props) {
     setNewCommentText(event.target.value)
   }
 
+  function deleteComment(id) {
+    setComments(prevState => prevState.filter(comment => comment.id !== id))
+  }
+
   return (
     <article className={styles.post}>
       <header>
@@ -95,9 +99,9 @@ export function Post(props) {
         {comments.map((comment) => (
           <Comment
             key={comment.id}
-            content={comment.content}
-            createdAt={comment.createdAt}
+            comment={comment}
             author={CURRENT_PROFILE}
+            onDeleteComment={deleteComment}
           />
         ))}
       </div>
