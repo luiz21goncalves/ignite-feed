@@ -5,6 +5,7 @@ import shortid from 'shortid'
 
 import { Avatar } from '../Avatar'
 import { Comment } from '../Comment'
+import { CURRENT_PROFILE } from '../../constants'
 
 import styles from './styles.module.css'
 
@@ -32,7 +33,8 @@ export function Post(props) {
       ...prevState,
       {
         id: shortid.generate(),
-        content: newCommentText
+        content: newCommentText,
+        createdAt: new Date(),
       }
     ]))
     setNewCommentText('')
@@ -96,7 +98,12 @@ export function Post(props) {
 
       <div className={styles.commentsList}>
         {comments.map((comment) => (
-          <Comment key={comment.id} content={comment.content} />
+          <Comment
+            key={comment.id}
+            content={comment.content}
+            createdAt={comment.createdAt}
+            author={CURRENT_PROFILE}
+          />
         ))}
       </div>
     </article>

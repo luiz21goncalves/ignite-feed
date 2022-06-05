@@ -4,13 +4,12 @@ import { Avatar } from '../Avatar'
 import styles from './styles.module.css'
 
 export function Comment(props) {
-  const { content } = props
+  const { content, author } = props
 
   return (
     <div className={styles.comment}>
       <Avatar 
-        src="https://github.com/luiz21goncalves.png" 
-        alt="Avatar de Luiz Gonçalves"
+        src={author.avatarUrl}
         hasBorder={false}
       />
 
@@ -18,7 +17,7 @@ export function Comment(props) {
         <div className={styles.commentContent}>
           <header>
             <div className={styles.authorAndTime}>
-              <strong>Luiz Gonçalves</strong>
+              <strong>{author.name}</strong>
               <time title="4 de junho de 2022 às 09:55h" dateTime='2022-06-04 09:55:00'>
                 Cerca de 2h
               </time>

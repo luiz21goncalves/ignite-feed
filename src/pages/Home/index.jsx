@@ -1,18 +1,16 @@
+import shortid from 'shortid'
+
 import { Header } from '../../components/Header'
 import { Post } from '../../components/Post'
 import { Sidebar } from '../../components/Sidebar'
-import shortid from 'shortid'
+import { CURRENT_PROFILE } from '../../constants'
 
 import styles from './styles.module.css'
 
 const posts = [
   {
     id: shortid.generate(),
-    author: {
-      avatarUrl: 'https://github.com/luiz21goncalves.png',
-      name: 'Luiz Gonçalves',
-      role: 'Desenvolveder Web'
-    },
+    author: CURRENT_PROFILE,
     content: [
       { type: 'paragraph', content: 'Fala galeraa 👋' },
       { type: 'paragraph', content: 'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀' },
