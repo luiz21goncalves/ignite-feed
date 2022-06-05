@@ -1,10 +1,15 @@
 import { ThumbsUp, Trash } from 'phosphor-react'
+
 import { Avatar } from '../Avatar'
+import { formatLongDate, formatRelativeDate } from '../../utils/date'
 
 import styles from './styles.module.css'
 
 export function Comment(props) {
-  const { content, author } = props
+  const { content, author, createdAt } = props
+
+  const createdDateFormatted = formatLongDate(createdAt)
+  const createdDateRelativeToNow = formatRelativeDate(createdAt)
 
   return (
     <div className={styles.comment}>
@@ -18,8 +23,8 @@ export function Comment(props) {
           <header>
             <div className={styles.authorAndTime}>
               <strong>{author.name}</strong>
-              <time title="4 de junho de 2022 às 09:55h" dateTime='2022-06-04 09:55:00'>
-                Cerca de 2h
+              <time title={createdDateFormatted} dateTime={createdAt.toISOString()}>
+                {createdDateRelativeToNow}
               </time>
             </div>
 

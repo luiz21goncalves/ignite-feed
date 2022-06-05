@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { formatDistanceToNow, format } from 'date-fns'
-import ptBR from 'date-fns/locale/pt-BR'
 import shortid from 'shortid'
 
 import { Avatar } from '../Avatar'
 import { Comment } from '../Comment'
 import { CURRENT_PROFILE } from '../../constants'
+import { formatLongDate, formatRelativeDate } from '../../utils/date'
 
 import styles from './styles.module.css'
 
@@ -15,16 +14,8 @@ export function Post(props) {
   const [comments, setComments] = useState([])
   const [newCommentText, setNewCommentText] = useState('')
 
-  const publishedDateFormatted = format(
-    publishedAt,
-    "dd 'de' LLLL 'de' yyyy 'às' HH:mm'h'",
-    { locale: ptBR }
-  )
-
-  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
-    locale: ptBR,
-    addSuffix: true,
-  })
+  const publishedDateFormatted = formatLongDate(publishedAt)
+  const publishedDateRelativeToNow = formatRelativeDate(publishedAt)
 
   function handleCreateNewComment(event) {
     event.preventDefault()
