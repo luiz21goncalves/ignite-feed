@@ -1,12 +1,13 @@
 import { Header } from '../../components/Header'
 import { Post } from '../../components/Post'
 import { Sidebar } from '../../components/Sidebar'
+import shortid from 'shortid'
 
 import styles from './styles.module.css'
 
 const posts = [
   {
-    id: 1,
+    id: shortid.generate(),
     author: {
       avatarUrl: 'https://github.com/luiz21goncalves.png',
       name: 'Luiz Gonçalves',
@@ -20,7 +21,7 @@ const posts = [
     publishedAt: new Date('2022-06-03 20:00:00')
   },
   {
-    id: 2,
+    id: shortid.generate(),
     author: {
       avatarUrl: 'https://github.com/diego3g.png',
       name: 'Diego Fernandes',
@@ -34,7 +35,7 @@ const posts = [
     publishedAt: new Date('2022-06-04 08:00:00')
   },
   {
-    id: 3,
+    id: shortid.generate(),
     author: {
       avatarUrl: 'https://github.com/maykbrito.png',
       name: 'Mayk Brito',
