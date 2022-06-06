@@ -6,7 +6,25 @@ import { formatLongDate, formatRelativeDate } from '../../utils/date'
 import styles from './styles.module.css'
 import { useState } from 'react'
 
-export function Comment(props) {
+type Comment = {
+  id: string;
+  content: string;
+  createdAt: Date;
+}
+
+type Author = {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+type CommentProps = {
+  comment: Comment;
+  author: Author;
+  onDeleteComment: (id: string) => void;
+}
+
+export function Comment(props: CommentProps) {
   const { comment, author, onDeleteComment } = props
 
   const [likeComment, setLikeComment] = useState(0);
@@ -22,6 +40,7 @@ export function Comment(props) {
     <div className={styles.comment}>
       <Avatar 
         src={author.avatarUrl}
+        alt={`Avatar de ${author.name}`}
         hasBorder={false}
       />
 

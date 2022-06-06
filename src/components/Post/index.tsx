@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 import shortid from 'shortid'
 
 import { Avatar } from '../Avatar'
@@ -8,21 +8,40 @@ import { formatLongDate, formatRelativeDate } from '../../utils/date'
 
 import styles from './styles.module.css'
 
-export function Post(props) {
+type Author = {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+type Content = {
+  type: 'paragraph' | 'link';
+  content: string;
+}
+
+type Comment = {
+  id: string;
+  content: string;
+  createdAt: Date;
+}
+
+type PostProps = {
+  author: Author;
+  content: Content[]
+  publishedAt: Date;
+}
+
+export function Post(props: PostProps) {
   const { author, content, publishedAt } = props
 
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState<Comment[]>([])
   const [newCommentText, setNewCommentText] = useState('')
 
   const publishedDateFormatted = formatLongDate(publishedAt)
   const publishedDateRelativeToNow = formatRelativeDate(publishedAt)
 
-  function handleCreateNewComment(event) {
+  function handleCreateNewComment(event: FormEvent) {
     event.preventDefault()
-
-    if (newCommentText.length === 0) {
-      return
-    }
 
     setComments(prevState => ([
       ...prevState,
@@ -35,16 +54,16 @@ export function Post(props) {
     setNewCommentText('')
   }
 
-  function handleChangeNewCommentText(event) {
+  function handleChangeNewCommentText(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('')
     setNewCommentText(event.target.value)
   }
 
-  function deleteComment(id) {
+  function deleteComment(id: string) {
     setComments(prevState => prevState.filter(comment => comment.id !== id))
   }
 
-  function handleNewCommentInvalid(event) {
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('Esse campo é obrigatório!')
   }
 
@@ -56,6 +75,7 @@ export function Post(props) {
         <div className={styles.author}>
           <Avatar
             src={author.avatarUrl}
+            alt={`Avatar de ${author.name}`}
           />
           <div className={styles.authorInfo}>
             <strong>{author.name}</strong>

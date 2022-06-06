@@ -1,6 +1,12 @@
 import styles from './styles.module.css'
 
-export function Avatar(props) {
+type AvatarProps = {
+  src: string;
+  alt?: string;
+  hasBorder?: boolean;
+}
+
+export function Avatar(props: AvatarProps) {
   const { src, alt, hasBorder = true } = props
 
   return (
