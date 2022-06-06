@@ -1,5 +1,10 @@
 {
   "posts": [],
   "comments": [],
-  "profiles": []
+  "me": {
+    "name": "Carney Bembridge",
+    "role": "Electrician",
+    "avatarUrl": "https://robohash.org/facerevelasperiores.jpg?size=50x50&set=set1",
+    "coverUrl": "https://robohash.org/fugaeosvoluptatem.jpg?size=250x250&set=set1"
+  }
 }

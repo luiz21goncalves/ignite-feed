@@ -15,7 +15,7 @@ type Author = {
 };
 
 type Content = {
-  type: 'paragraph' | 'link';
+  type: string;
   content: string;
 };
 
