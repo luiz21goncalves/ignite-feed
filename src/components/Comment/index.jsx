@@ -4,12 +4,19 @@ import { Avatar } from '../Avatar'
 import { formatLongDate, formatRelativeDate } from '../../utils/date'
 
 import styles from './styles.module.css'
+import { useState } from 'react'
 
 export function Comment(props) {
   const { comment, author, onDeleteComment } = props
 
+  const [likeComment, setLikeComment] = useState(0);
+
   const createdDateFormatted = formatLongDate(comment.createdAt)
   const createdDateRelativeToNow = formatRelativeDate(comment.createdAt)
+  
+  function handleLikeComment() {
+    setLikeComment(prevState => prevState + 1);
+  }
 
   return (
     <div className={styles.comment}>
@@ -36,8 +43,9 @@ export function Comment(props) {
         </div>
 
         <footer>
-          <button>
-            <ThumbsUp size={20} /> Aplaudir <span>20</span>
+          <button onClick={handleLikeComment}>
+            <ThumbsUp size={20} /> Aplaudir
+            <span>{likeComment}</span>
           </button>
         </footer>
       </div>
