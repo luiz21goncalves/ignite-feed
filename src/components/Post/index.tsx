@@ -6,18 +6,8 @@ import { Avatar } from '../Avatar';
 import { Comment } from '../Comment';
 import { CURRENT_PROFILE } from '../../constants';
 import { formatLongDate, formatRelativeDate } from '../../utils/date';
+import { Author, Content } from '../../types';
 import styles from './styles.module.css';
-
-type Author = {
-  name: string;
-  role: string;
-  avatarUrl: string;
-};
-
-type Content = {
-  type: string;
-  content: string;
-};
 
 type Comment = {
   id: string;
@@ -28,7 +18,7 @@ type Comment = {
 type PostProps = {
   author: Author;
   content: Content[];
-  publishedAt: Date;
+  publishedAt: string;
 };
 
 export function Post(props: PostProps) {
@@ -37,8 +27,9 @@ export function Post(props: PostProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newCommentText, setNewCommentText] = useState('');
 
-  const publishedDateFormatted = formatLongDate(publishedAt);
-  const publishedDateRelativeToNow = formatRelativeDate(publishedAt);
+  const publishedDateFormatted = formatLongDate(new Date(publishedAt));
+  const publishedDateRelativeToNow = formatRelativeDate(new Date(publishedAt));
+  const publishedDateIsoString = new Date(publishedAt).toISOString();
 
   function handleCreateNewComment(event: FormEvent) {
     event.preventDefault();
@@ -82,10 +73,7 @@ export function Post(props: PostProps) {
           </div>
         </div>
 
-        <time
-          title={publishedDateFormatted}
-          dateTime={publishedAt.toISOString()}
-        >
+        <time title={publishedDateFormatted} dateTime={publishedDateIsoString}>
           Publicado {publishedDateRelativeToNow}
         </time>
       </header>
