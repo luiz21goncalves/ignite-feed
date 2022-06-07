@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "server:dev": "json-server --watch db.json --port 3333",
+    "server:dev": "json-server --watch db.json --port 3333 --delay 300",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
