@@ -22,3 +22,10 @@ export type Post = {
   content: Content[];
   publishedAt: string;
 };
+
+export type Comment = {
+  id: number;
+  postId: string;
+  content: string;
+  createdAt: string;
+};

@@ -1,13 +1,15 @@
 import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 
 import shortid from 'shortid';
+import { useMutation, useQuery } from 'react-query';
 
 import { Avatar } from '../Avatar';
 import { Comment } from '../Comment';
-import { CURRENT_PROFILE } from '../../constants';
 import { formatLongDate, formatRelativeDate } from '../../utils/date';
-import { Author, Content } from '../../types';
+import { Post as PostTypes } from '../../types';
+import { queryClient } from '../../services/queryClient';
 import styles from './styles.module.css';
+import { getAllCommentsByPost, postComment } from '../../services/api/comment';
 
 type Comment = {
   id: string;
@@ -16,44 +18,43 @@ type Comment = {
 };
 
 type PostProps = {
-  author: Author;
-  content: Content[];
-  publishedAt: string;
+  post: PostTypes;
 };
 
 export function Post(props: PostProps) {
-  const { author, content, publishedAt } = props;
+  const { post } = props;
 
-  const [comments, setComments] = useState<Comment[]>([]);
   const [newCommentText, setNewCommentText] = useState('');
 
-  const publishedDateFormatted = formatLongDate(new Date(publishedAt));
-  const publishedDateRelativeToNow = formatRelativeDate(new Date(publishedAt));
-  const publishedDateIsoString = new Date(publishedAt).toISOString();
+  const { mutate } = useMutation(postComment);
+  const { data: comments } = useQuery(['comments', post.id], () =>
+    getAllCommentsByPost(post.id),
+  );
+
+  const publishedDateFormatted = formatLongDate(new Date(post.publishedAt));
+  const publishedDateRelativeToNow = formatRelativeDate(
+    new Date(post.publishedAt),
+  );
+  const publishedDateIsoString = new Date(post.publishedAt).toISOString();
 
   function handleCreateNewComment(event: FormEvent) {
     event.preventDefault();
 
-    setComments((prevState) => [
-      ...prevState,
+    mutate(
       {
-        id: shortid.generate(),
         content: newCommentText,
-        createdAt: new Date(),
+        postId: post.id,
+        createdAt: new Date().toISOString(),
       },
-    ]);
+      { onSuccess: () => queryClient.invalidateQueries(['comments', post.id]) },
+    );
+
     setNewCommentText('');
   }
 
   function handleChangeNewCommentText(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('');
     setNewCommentText(event.target.value);
-  }
-
-  function deleteComment(id: string) {
-    setComments((prevState) =>
-      prevState.filter((comment) => comment.id !== id),
-    );
   }
 
   function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
@@ -66,10 +67,13 @@ export function Post(props: PostProps) {
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src={author.avatarUrl} alt={`Avatar de ${author.name}`} />
+          <Avatar
+            src={post.author.avatarUrl}
+            alt={`Avatar de ${post.author.name}`}
+          />
           <div className={styles.authorInfo}>
-            <strong>{author.name}</strong>
-            <span>{author.role}</span>
+            <strong>{post.author.name}</strong>
+            <span>{post.author.role}</span>
           </div>
         </div>
 
@@ -79,7 +83,7 @@ export function Post(props: PostProps) {
       </header>
 
       <div className={styles.content}>
-        {content.map((line) => {
+        {post.content.map((line) => {
           if (line.type === 'paragraph') {
             return <p key={shortid.generate()}>{line.content}</p>;
           }
@@ -114,13 +118,8 @@ export function Post(props: PostProps) {
       </form>
 
       <div className={styles.commentsList}>
-        {comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            author={CURRENT_PROFILE}
-            onDeleteComment={deleteComment}
-          />
+        {comments?.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
         ))}
       </div>
     </article>
