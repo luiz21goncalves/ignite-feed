@@ -10,7 +10,7 @@ export function Avatar(props: AvatarProps) {
   const { hasBorder = true, alt, src, ...attrs } = props;
 
   return (
-    <div className={styles.container}>
+    <div className={hasBorder ? styles.containerWithBorder : styles.container}>
       <img
         className={hasBorder ? styles.avatarWithBorder : styles.avatar}
         src={src}

@@ -1,6 +1,13 @@
 .container {
   background: var(--gray-900);
   border-radius: 8px;
+  height: 3rem;
+}
+
+.containerWithBorder {
+  background: var(--gray-900);
+  border-radius: 8px;
+  height: calc(3rem + 12px);
 }
 
 .avatar {
