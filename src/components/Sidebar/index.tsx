@@ -3,10 +3,15 @@ import { useQuery } from 'react-query';
 
 import { getCurrentUserProfile } from '../../services/api/profile';
 import { Avatar } from '../Avatar';
+import { LoadingSidebar } from '../Shimmer/LoadingSidebar';
 import styles from './styles.module.css';
 
 export function Sidebar() {
-  const { data: profile } = useQuery('me', getCurrentUserProfile);
+  const { data: profile, isLoading } = useQuery('me', getCurrentUserProfile);
+
+  if (isLoading) {
+    return <LoadingSidebar />;
+  }
 
   return (
     <aside className={styles.sidebar}>
